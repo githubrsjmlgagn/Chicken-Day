@@ -466,8 +466,21 @@ function shareWA(){
   window.open('https://wa.me/?text='+encodeURIComponent(txt));
 }
 
+function askFileName(ext){
+  const def = `chicken_day_${todayStr}`;
+  let name = prompt(`Nama file (.${ext}):`, def);
+  if(name===null) return null;            // petugas menekan Batal
+  name = name.trim();
+  if(!name) name = def;                   // kosong -> pakai default
+  name = name.replace(/[\\/:*?"<>|]/g,'-');// buang karakter ilegal nama file
+  if(!name.toLowerCase().endsWith('.'+ext)) name += '.'+ext;
+  return name;
+}
+
 function downloadXLSX(){
   if(!entries.length) return;
+  const fname = askFileName('xlsx');
+  if(fname===null) return;
   const aoa=[['No','Tanggal','Subject','Detail','Keterangan','Debit','Kredit','Saldo','Petugas']];
   entries.forEach((e,i)=>{
     aoa.push([i+1, e.tanggal, e.subject, e.detail, e.ket, e.debit||0, e.kredit||0, null, e.petugas]);
@@ -487,17 +500,19 @@ function downloadXLSX(){
   ws['!cols']=[{wch:5},{wch:12},{wch:16},{wch:16},{wch:20},{wch:13},{wch:13},{wch:13},{wch:14}];
   const wb=XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Kas Harian');
-  XLSX.writeFile(wb, `kas_harian_${todayStr}.xlsx`);
+  XLSX.writeFile(wb, fname);
 }
 
 function downloadCSV(){
   if(!entries.length) return;
+  const fname = askFileName('csv');
+  if(fname===null) return;
   const header='No,Tanggal,Subject,Detail,Keterangan,Debit,Kredit,Saldo,Petugas\n';
   const rows=entries.map((e,i)=>`${i+1},${e.tanggal},"${e.subject}","${e.detail}","${e.ket}",${e.debit},${e.kredit},${e.saldo},"${e.petugas}"`).join('\n');
   const blob=new Blob(['\uFEFF'+header+rows],{type:'text/csv;charset=utf-8'});
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
-  a.href=url;a.download=`kas_harian_${todayStr}.csv`;a.click();
+  a.href=url;a.download=fname;a.click();
   URL.revokeObjectURL(url);
 }
 
