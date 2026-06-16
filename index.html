@@ -467,7 +467,7 @@ function shareWA(){
 }
 
 function askFileName(ext){
-  const def = `chicken_day_${todayStr}`;
+  const def = `${todayStr}_CD_`;
   let name = prompt(`Nama file (.${ext}):`, def);
   if(name===null) return null;            // petugas menekan Batal
   name = name.trim();
