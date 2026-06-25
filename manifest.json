@@ -1,7 +1,7 @@
 {
-  "name": "Chicken Day — Laporan Operasional",
+  "name": "Chicken Day — Rekap Operasional",
   "short_name": "Chicken Day",
-  "description": "Laporan operasional harian toko Chicken Day",
+  "description": "Rekap operasional harian toko Chicken Day",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
