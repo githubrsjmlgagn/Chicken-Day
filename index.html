@@ -420,6 +420,8 @@ const OUTLET_KEY='RO_CD_outlet';
 const RIWAYAT_SUBJECT_KEY='RO_CD_riwayat_subject';
 const RIWAYAT_DETAIL_KEY='RO_CD_riwayat_detail';
 const RIWAYAT_PETUGAS_KEY='RO_CD_riwayat_petugas';
+const LAST_BACKUP_KEY='RO_CD_last_backup';
+const BACKUP_REMINDER_HARI=7;
 const ARSIP_PREFIX='RO_CD_arsip_';
 
 /* ========== STORAGE ========== */
@@ -656,6 +658,21 @@ function autoArsipkanJikaGantiHari(){
   toast(`Hari baru terdeteksi — ${jumlah} entry tanggal ${tglData} diarsipkan otomatis.`);
 }
 
+/* ========== REMINDER BACKUP ========== */
+function cekReminderBackup(){
+  const last=localStorage.getItem(LAST_BACKUP_KEY);
+  const adaData=entries.length||getAllArsipKeys().length;
+  if(!adaData)return; // tidak ada apa pun untuk dibackup, tidak perlu ingatkan
+  if(!last){
+    toast('Belum pernah backup data — disarankan backup lewat Pengaturan ⚙');
+    return;
+  }
+  const hariBerlalu=Math.floor((Date.now()-Number(last))/86400000);
+  if(hariBerlalu>=BACKUP_REMINDER_HARI){
+    toast(`Sudah ${hariBerlalu} hari sejak backup terakhir — disarankan backup lagi lewat Pengaturan ⚙`);
+  }
+}
+
 /* ========== WA ========== */
 function getNomorWA(){return localStorage.getItem(WA_KEY)||'';}
 function getNamaOutlet(){return localStorage.getItem(OUTLET_KEY)||'';}
@@ -748,6 +765,7 @@ function backupJSON(){
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
   a.href=url;a.download=`backup_RO_CD_${todayStr}.json`;a.click();URL.revokeObjectURL(url);
+  localStorage.setItem(LAST_BACKUP_KEY,Date.now().toString());
   toast(`Backup diunduh (${total} hari)`);
 }
 function restoreJSON(event){
@@ -1008,6 +1026,7 @@ function toast(m){
 
 /* ========== INIT ========== */
 loadState();autoArsipkanJikaGantiHari();calcSaldo();updateSummary();renderList();muatSemuaDatalist();
+setTimeout(cekReminderBackup,3000);
 
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
