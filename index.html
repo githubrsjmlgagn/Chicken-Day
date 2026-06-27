@@ -634,14 +634,7 @@ function shareWA(){
   const td=entries.reduce((a,e)=>a+e.debit,0);
   const tk=entries.reduce((a,e)=>a+e.kredit,0);
   const pet=entries[entries.length-1].petugas||'-';
-  let txt=`*REKAP OPERASIONAL - CHICKEN DAY*\n${displayDate}\nPetugas: ${pet}\n\n`;
-  entries.forEach((e,i)=>{
-    txt+=`${i+1}. ${e.subject} - ${e.detail}`;
-    if(e.ket)txt+=` (${e.ket})`;
-    if(e.debit)txt+=`\n   Debit: ${fmtRp(e.debit)}`;
-    if(e.kredit)txt+=`\n   Kredit: ${fmtRp(e.kredit)}`;
-    txt+=`\n   Saldo: ${fmtRp(e.saldo)}\n\n`;
-  });
+  let txt=`RO_CD_\n${displayDate}\nPetugas: ${pet}\n\n`;
   txt+=`*Total Debit: ${fmtRp(td)}*\n*Total Kredit: ${fmtRp(tk)}*\n*Saldo Akhir: ${fmtRp(td-tk)}*`;
   const url=nomor?`https://wa.me/${nomor}?text=${encodeURIComponent(txt)}`:`https://wa.me/?text=${encodeURIComponent(txt)}`;
   window.open(url);
