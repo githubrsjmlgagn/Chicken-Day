@@ -34,9 +34,6 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,s
 .brandmark h1{font-size:21px;font-weight:600;letter-spacing:-0.02em;line-height:1.05}
 .brandmark .date{font-size:11.5px;color:var(--ink-soft);margin-top:5px}
 .masthead-actions{display:flex;gap:7px;align-items:flex-start;margin-top:2px;flex-shrink:0}
-.newday{appearance:none;background:none;border:1px solid var(--line);color:var(--ink-soft);font-size:11px;font-weight:500;letter-spacing:0.03em;padding:7px 12px;border-radius:999px;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:5px;transition:all .15s ease;font-family:inherit}
-.newday:hover{border-color:var(--brand);color:var(--brand)}
-.newday:active{transform:scale(0.97)}
 .btn-setting{appearance:none;background:none;border:1px solid var(--line);color:var(--ink-soft);font-size:14px;padding:6px 10px;border-radius:999px;cursor:pointer;display:flex;align-items:center;transition:all .15s ease;font-family:inherit}
 .btn-setting:hover{border-color:var(--brand);color:var(--brand)}
 
@@ -110,9 +107,9 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,s
 .entry .flow{display:flex;gap:14px;margin-top:9px;margin-left:26px}
 .entry .flow span{font-size:12px;font-weight:500;display:flex;align-items:center;gap:4px}
 .entry .flow .d{color:var(--debit)}.entry .flow .k{color:var(--credit)}
-.entry .acts{display:flex;gap:8px;margin-top:11px;margin-left:26px}
+.entry .acts{display:flex;gap:8px;margin-top:11px;margin-left:26px;flex-wrap:wrap}
 .entry .acts button{font-size:11px;font-weight:600;letter-spacing:0.03em;padding:5px 13px;border-radius:999px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink-soft);font-family:inherit;transition:all .15s ease;}
-.entry .acts .edit:hover{border-color:var(--brand);color:var(--brand)}
+.entry .acts .edit:hover,.entry .acts .dup:hover{border-color:var(--brand);color:var(--brand)}
 .entry .acts .del{color:var(--brand)}
 .entry .acts .del:hover{background:var(--brand);color:#fff;border-color:var(--brand)}
 .empty{text-align:center;color:var(--ink-faint);font-size:12.5px;padding:34px 0;line-height:1.6}
@@ -126,6 +123,9 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,s
 .send-btn:active{transform:scale(0.97)}
 .send-wa{background:var(--wa);color:#fff}
 .send-wa:hover{background:#1A9A4F}
+.send-wa:disabled{background:var(--line);color:var(--ink-faint);cursor:not-allowed;opacity:.7}
+.send-wa:disabled:hover{background:var(--line)}
+.wa-locked-hint{font-size:11px;color:var(--brand);margin-bottom:9px;text-align:center}
 .send-xl{background:var(--ink);color:#fff}
 .send-xl:hover{background:#3A2E22}
 .wa-nomor-wrap{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--ink-faint);margin-top:6px}
@@ -201,7 +201,6 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,s
     </div>
     <div class="masthead-actions">
       <button class="btn-setting" onclick="bukaPin('setting')" title="Pengaturan"><i class="fi fi-rr-settings"></i></button>
-      <button class="newday" onclick="askNewDay()"><i class="fi fi-rr-calendar-plus"></i> Hari Baru</button>
     </div>
   </div>
 
@@ -242,16 +241,14 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,s
   <div class="form">
     <div class="edit-banner" id="edit-banner"><i class="fi fi-rr-pencil"></i> Sedang merevisi entry — ubah lalu simpan.</div>
     <div class="field">
-      <label>Tanggal</label>
-      <input type="date" id="f-tanggal" readonly>
-    </div>
-    <div class="field">
       <label>Subject</label>
-      <input type="text" id="f-subject" placeholder="Pasar, Toko ABC, dll">
+      <input type="text" id="f-subject" placeholder="Pasar, Toko ABC, dll" list="dl-subject">
+      <datalist id="dl-subject"></datalist>
     </div>
     <div class="field">
       <label>Detail</label>
-      <input type="text" id="f-detail" placeholder="Cabai, tomat, dll">
+      <input type="text" id="f-detail" placeholder="Cabai, tomat, dll" list="dl-detail">
+      <datalist id="dl-detail"></datalist>
     </div>
     <div class="field">
       <label>Keterangan</label>
@@ -269,7 +266,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,s
     </div>
     <div class="field">
       <label>Petugas</label>
-      <input type="text" id="f-petugas" placeholder="Nama petugas">
+      <input type="text" id="f-petugas" placeholder="Nama petugas" list="dl-petugas">
+      <datalist id="dl-petugas"></datalist>
     </div>
     <button class="btn btn-primary" onclick="submitEntry()"><i class="fi fi-rr-check"></i> <span id="btn-label">Simpan Entry</span></button>
     <button class="btn btn-ghost" id="btn-cancel" style="display:none" onclick="cancelEdit()"><i class="fi fi-rr-cross-small"></i> Batal Revisi</button>
@@ -291,9 +289,10 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,s
       <span class="rule"></span>
     </div>
     <div class="send-grid">
-      <button class="send-btn send-wa" onclick="shareWA()"><i class="fi fi-brands-whatsapp"></i><span>WhatsApp</span></button>
+      <button class="send-btn send-wa" id="btn-send-wa" onclick="shareWA()"><i class="fi fi-brands-whatsapp"></i><span>WhatsApp</span></button>
       <button class="send-btn send-xl" onclick="downloadXLSX()"><i class="fi fi-rr-file-excel"></i><span>Excel</span></button>
     </div>
+    <div class="wa-locked-hint" id="wa-locked-hint" style="display:none">Export Excel dulu untuk mengaktifkan kirim WhatsApp</div>
     <div class="wa-nomor-wrap">
       <span>Nomor WA admin:</span>
       <b id="wa-nomor-tampil">Belum diatur</b>
@@ -310,18 +309,6 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,s
     <div class="modal-btns">
       <button onclick="closeModal()">Batal</button>
       <button class="confirm" onclick="confirmDelete()">Hapus</button>
-    </div>
-  </div>
-</div>
-
-<!-- Modal hari baru -->
-<div class="modal-bg" id="modal-newday">
-  <div class="modal">
-    <h3>Mulai Hari Baru?</h3>
-    <p>Data hari ini akan disimpan sebagai arsip. Pastikan sudah kirim ke kantor pusat sebelum melanjutkan.</p>
-    <div class="modal-btns">
-      <button onclick="closeNewDay()">Batal</button>
-      <button class="confirm" onclick="confirmNewDay()">Lanjutkan</button>
     </div>
   </div>
 </div>
@@ -364,6 +351,16 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,s
         <button class="panel-btn panel-btn-primary" onclick="simpanNomorWA()">Simpan</button>
       </div>
       <div class="panel-status" id="status-nomor-wa"></div>
+    </div>
+
+    <div class="panel-section">
+      <h4><i class="fi fi-rr-shop"></i> Nama Outlet</h4>
+      <p>Otomatis ditambahkan ke nama file Excel dan teks WhatsApp saat export/kirim.</p>
+      <div class="panel-input-row">
+        <input type="text" id="input-outlet" placeholder="Contoh: Ampel">
+        <button class="panel-btn panel-btn-primary" onclick="simpanNamaOutlet()">Simpan</button>
+      </div>
+      <div class="panel-status" id="status-outlet"></div>
     </div>
 
     <div class="panel-section">
@@ -419,6 +416,10 @@ let exportedWA=false; // status kirim WhatsApp hari ini
 const STORAGE_KEY='RO_CD_hari_ini';
 const PIN_KEY='RO_CD_pin';
 const WA_KEY='RO_CD_wa';
+const OUTLET_KEY='RO_CD_outlet';
+const RIWAYAT_SUBJECT_KEY='RO_CD_riwayat_subject';
+const RIWAYAT_DETAIL_KEY='RO_CD_riwayat_detail';
+const RIWAYAT_PETUGAS_KEY='RO_CD_riwayat_petugas';
 const ARSIP_PREFIX='RO_CD_arsip_';
 
 /* ========== STORAGE ========== */
@@ -441,13 +442,35 @@ function loadState(){
   }catch(err){console.warn('Gagal muat:',err);}
 }
 
+/* ========== RIWAYAT TERM (DATALIST) ========== */
+function tambahRiwayatTerm(key,value){
+  if(!value)return;
+  try{
+    let arr=JSON.parse(localStorage.getItem(key)||'[]');
+    arr=arr.filter(x=>x.toLowerCase()!==value.toLowerCase());
+    arr.unshift(value);
+    if(arr.length>30)arr=arr.slice(0,30);
+    localStorage.setItem(key,JSON.stringify(arr));
+  }catch(e){}
+}
+function muatDatalist(key,elId){
+  try{
+    const arr=JSON.parse(localStorage.getItem(key)||'[]');
+    document.getElementById(elId).innerHTML=arr.map(v=>`<option value="${esc(v)}"></option>`).join('');
+  }catch(e){}
+}
+function muatSemuaDatalist(){
+  muatDatalist(RIWAYAT_SUBJECT_KEY,'dl-subject');
+  muatDatalist(RIWAYAT_DETAIL_KEY,'dl-detail');
+  muatDatalist(RIWAYAT_PETUGAS_KEY,'dl-petugas');
+}
+
 /* ========== TANGGAL ========== */
 const today=new Date();
 const pad=n=>String(n).padStart(2,'0');
 const todayStr=`${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`;
 const displayDate=today.toLocaleDateString('id-ID',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
 document.getElementById('tgl-header').textContent=displayDate;
-document.getElementById('f-tanggal').value=todayStr;
 
 /* ========== FORMAT ========== */
 function fmt(n){return Math.round(n).toLocaleString('id-ID')}
@@ -502,6 +525,13 @@ function updateBadgeExport(){
     elW.className='badge-status belum';
     elW.innerHTML='● WhatsApp belum dikirim';
   }
+  // Tombol WA nonaktif sampai Excel diexport untuk data saat ini
+  const btnWA=document.getElementById('btn-send-wa');
+  const hint=document.getElementById('wa-locked-hint');
+  if(btnWA){
+    btnWA.disabled=!exportedExcel;
+    hint.style.display=exportedExcel?'none':'block';
+  }
 }
 
 /* ========== RENDER LIST ========== */
@@ -527,6 +557,7 @@ function renderList(){
       </div>
       <div class="acts">
         <button class="edit" onclick="editEntry(${e.id})"><i class="fi fi-rr-pencil"></i> Edit</button>
+        <button class="dup" onclick="duplikatEntry(${e.id})"><i class="fi fi-rr-copy"></i> Duplikat</button>
         <button class="del" onclick="askDelete(${e.id})"><i class="fi fi-rr-trash"></i> Hapus</button>
       </div>
     </div>
@@ -552,14 +583,28 @@ function submitEntry(){
     entries.push({id:idCounter++,tanggal:tgl,subject:subj,detail:det,ket,debit:deb,kredit:kre,petugas:pet,saldo:0});
   }
   exportedExcel=false;exportedWA=false;
+  tambahRiwayatTerm(RIWAYAT_SUBJECT_KEY,subj);
+  tambahRiwayatTerm(RIWAYAT_DETAIL_KEY,det);
+  tambahRiwayatTerm(RIWAYAT_PETUGAS_KEY,pet);
+  muatSemuaDatalist();
   calcSaldo();updateSummary();renderList();saveState();
   ['f-subject','f-detail','f-ket','f-debit','f-kredit'].forEach(id=>document.getElementById(id).value='');
 }
 
+function duplikatEntry(id){
+  const e=entries.find(x=>x.id===id);if(!e)return;
+  document.getElementById('f-subject').value=e.subject;
+  document.getElementById('f-detail').value=e.detail;
+  document.getElementById('f-ket').value=e.ket;
+  document.getElementById('f-debit').value=e.debit?e.debit.toLocaleString('id-ID'):'';
+  document.getElementById('f-kredit').value=e.kredit?e.kredit.toLocaleString('id-ID'):'';
+  document.getElementById('f-petugas').value=e.petugas;
+  document.querySelector('.form').scrollIntoView({behavior:'smooth',block:'center'});
+  toast('Data disalin ke form — sesuaikan nominal lalu Simpan');
+}
 function editEntry(id){
   const e=entries.find(x=>x.id===id);if(!e)return;
   editId=id;
-  document.getElementById('f-tanggal').value=todayStr;
   document.getElementById('f-subject').value=e.subject;
   document.getElementById('f-detail').value=e.detail;
   document.getElementById('f-ket').value=e.ket;
@@ -575,7 +620,6 @@ function editEntry(id){
 }
 function exitEditMode(){
   editId=null;
-  document.getElementById('f-tanggal').value=todayStr;
   document.getElementById('btn-label').textContent='Simpan Entry';
   document.getElementById('form-title').textContent='Input Transaksi';
   document.getElementById('btn-cancel').style.display='none';
@@ -598,24 +642,30 @@ function confirmDelete(){
   calcSaldo();updateSummary();renderList();closeModal();saveState();
 }
 
-/* ========== HARI BARU ========== */
-function askNewDay(){document.getElementById('modal-newday').classList.add('show');}
-function closeNewDay(){document.getElementById('modal-newday').classList.remove('show');}
-function confirmNewDay(){
-  // Arsipkan data hari ini sebelum reset
-  if(entries.length){
-    const arsipKey=ARSIP_PREFIX+todayStr+'_'+Date.now();
-    try{localStorage.setItem(arsipKey,JSON.stringify({tanggal:todayStr,entries,exportedExcel,exportedWA,disimpan:new Date().toISOString()}));}
-    catch(e){}
-  }
-  entries=[];idCounter=1;exportedExcel=false;exportedWA=false;exitEditMode();
-  ['f-subject','f-detail','f-ket','f-debit','f-kredit'].forEach(id=>document.getElementById(id).value='');
-  saveState();updateSummary();renderList();closeNewDay();
-  toast('Hari baru dimulai. Data lama diarsipkan.');
+/* ========== AUTO-ARSIP GANTI HARI ========== */
+function autoArsipkanJikaGantiHari(){
+  if(!entries.length)return;
+  const tglData=entries[0].tanggal;
+  if(tglData===todayStr)return; // masih hari yang sama, tidak perlu arsip
+  const arsipKey=ARSIP_PREFIX+tglData+'_'+Date.now();
+  try{localStorage.setItem(arsipKey,JSON.stringify({tanggal:tglData,entries,exportedExcel,exportedWA,disimpan:new Date().toISOString()}));}
+  catch(e){}
+  const jumlah=entries.length;
+  entries=[];idCounter=1;exportedExcel=false;exportedWA=false;
+  saveState();
+  toast(`Hari baru terdeteksi — ${jumlah} entry tanggal ${tglData} diarsipkan otomatis.`);
 }
 
 /* ========== WA ========== */
 function getNomorWA(){return localStorage.getItem(WA_KEY)||'';}
+function getNamaOutlet(){return localStorage.getItem(OUTLET_KEY)||'';}
+function simpanNamaOutlet(){
+  const val=document.getElementById('input-outlet').value.trim();
+  if(!val){toast('Nama outlet tidak boleh kosong');return;}
+  localStorage.setItem(OUTLET_KEY,val);
+  document.getElementById('status-outlet').textContent='✓ Tersimpan: '+val;
+  toast('Nama outlet disimpan');
+}
 function simpanNomorWA(){
   const val=document.getElementById('input-nomor-wa').value.trim().replace(/\D/g,'');
   if(!val){toast('Nomor tidak boleh kosong');return;}
@@ -630,11 +680,14 @@ function updateWANomor(){
 }
 function shareWA(){
   if(!entries.length)return;
+  if(!exportedExcel){toast('Export Excel dulu sebelum kirim WhatsApp');return;}
   const nomor=getNomorWA();
+  const outlet=getNamaOutlet();
   const td=entries.reduce((a,e)=>a+e.debit,0);
   const tk=entries.reduce((a,e)=>a+e.kredit,0);
   const pet=entries[entries.length-1].petugas||'-';
-  let txt=`RO_CD_\n${displayDate}\nPetugas: ${pet}\n\n`;
+  let txt=`RO_CD_${outlet?' '+outlet:''}\n${displayDate}\nPetugas: ${pet}\n\n`;
+  
   txt+=`*Total Debit: ${fmtRp(td)}*\n*Total Kredit: ${fmtRp(tk)}*\n*Saldo Akhir: ${fmtRp(td-tk)}*`;
   const url=nomor?`https://wa.me/${nomor}?text=${encodeURIComponent(txt)}`:`https://wa.me/?text=${encodeURIComponent(txt)}`;
   window.open(url);
@@ -644,7 +697,8 @@ function shareWA(){
 
 /* ========== EXCEL ========== */
 function askFileName(ext){
-  const def=`RO_${todayStr}_CD_`;
+  const outlet=getNamaOutlet();
+  const def=`RO_${todayStr}_CD_${outlet}`;
   let name=prompt(`Nama file (.${ext}):`,def);
   if(name===null)return null;
   name=name.trim();if(!name)name=def;
@@ -785,7 +839,8 @@ function exportRiwayat(){
   const hariList=getArsipDalamRentang(dari,sampai);
   if(!hariList.length){toast('Tidak ada data arsip dalam rentang tanggal tersebut');return;}
 
-  const def=`Riwayat_RO_CD_${dari}_sd_${sampai}`;
+  const outlet=getNamaOutlet();
+  const def=`Riwayat_RO_CD_${outlet?outlet+'_':''}${dari}_sd_${sampai}`;
   const fname=askFileNameRiwayat(def);if(fname===null)return;
 
   // --- Sheet 1: Rekap Harian ---
@@ -936,6 +991,9 @@ function bukaPanel(){
   const nomor=getNomorWA();
   document.getElementById('input-nomor-wa').value=nomor;
   document.getElementById('status-nomor-wa').textContent=nomor?'Nomor tersimpan: '+nomor:'';
+  const outlet=getNamaOutlet();
+  document.getElementById('input-outlet').value=outlet;
+  document.getElementById('status-outlet').textContent=outlet?'Outlet tersimpan: '+outlet:'';
   document.getElementById('panel-overlay').classList.add('show');
 }
 function tutupPanel(){document.getElementById('panel-overlay').classList.remove('show');}
@@ -949,7 +1007,7 @@ function toast(m){
 }
 
 /* ========== INIT ========== */
-loadState();calcSaldo();updateSummary();renderList();
+loadState();autoArsipkanJikaGantiHari();calcSaldo();updateSummary();renderList();muatSemuaDatalist();
 
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
