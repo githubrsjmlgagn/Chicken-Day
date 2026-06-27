@@ -5,6 +5,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
+<link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-brands/css/uicons-brands.css">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#7A1E1E">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -23,7 +25,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased;font-feature-settings:'tnum' 1;}
-.app{max-width:440px;margin:0 auto;padding:20px 18px 60px}
+.app{max-width:440px;margin:0 auto;padding:16px 16px 50px}
 
 /* Masthead */
 .masthead{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:26px}
@@ -46,22 +48,22 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,s
 .badge-status.kosong{display:none}
 
 /* Hero */
-.hero{background:var(--brand);color:#fff;border-radius:var(--radius);padding:24px 24px 22px;margin-bottom:14px;position:relative;overflow:hidden;}
+.hero{background:var(--brand);color:#fff;border-radius:var(--radius);padding:16px 18px 16px;margin-bottom:14px;position:relative;overflow:hidden;}
 .hero::after{content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;background:radial-gradient(circle,rgba(255,255,255,0.06),transparent 70%);}
 .hero .label{font-size:10.5px;letter-spacing:0.2em;text-transform:uppercase;opacity:0.75;font-weight:500}
-.hero .saldo{font-size:42px;font-weight:600;letter-spacing:-0.025em;line-height:1;margin-top:8px;padding-bottom:16px;border-bottom:2px solid var(--gold)}
+.hero .saldo{font-size:30px;font-weight:600;letter-spacing:-0.025em;line-height:1;margin-top:8px;padding-bottom:10px;border-bottom:2px solid var(--gold)}
 .hero .saldo .rp{font-size:18px;font-weight:500;opacity:0.7;margin-right:4px;letter-spacing:0}
-.hero .meta{display:flex;justify-content:space-between;align-items:flex-end;margin-top:20px;position:relative}
+.hero .meta{display:flex;justify-content:space-between;align-items:flex-end;margin-top:12px;position:relative}
 .hero .petugas-wrap{display:flex;flex-direction:column;gap:2px}
 .hero .petugas-wrap .k{font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;opacity:0.6}
 .hero .petugas-wrap .v{font-size:13px;font-weight:500}
 .hero .count{font-size:11px;opacity:0.7}
 
 /* Duo metric */
-.duo{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:26px}
-.metric{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px 16px}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.metric{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 12px}
 .metric .k{font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;display:flex;align-items:center;gap:5px}
-.metric .v{font-size:19px;font-weight:600;letter-spacing:-0.02em;margin-top:6px}
+.metric .v{font-size:16px;font-weight:600;letter-spacing:-0.02em;margin-top:6px}
 .metric .v .rp{font-size:11px;font-weight:500;color:var(--ink-faint);margin-right:3px}
 .metric.debit .v{color:var(--debit)}
 .metric.kredit .v{color:var(--credit)}
@@ -83,7 +85,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,s
 .field label{font-size:10.5px;letter-spacing:0.04em;text-transform:uppercase;color:var(--ink-soft);font-weight:600;display:block;margin-bottom:6px}
 .field input,.field textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:14px;background:#fff;color:var(--ink);font-family:inherit;transition:border-color .15s ease;}
 .field input:focus,.field textarea:focus{outline:none;border-color:var(--brand)}
-.field input::placeholder,.field textarea::placeholder{color:var(--ink-faint)}
+.field input::placeholder,.field textarea::placeholder{color:var(--ink-faint);opacity:.5}
 .field textarea{resize:none;height:54px;line-height:1.4}
 .pair{display:grid;grid-template-columns:1fr 1fr;gap:11px}
 .btn{width:100%;padding:13px;border-radius:9px;font-size:13.5px;font-weight:600;letter-spacing:0.01em;cursor:pointer;border:none;font-family:inherit;transition:all .15s ease;display:flex;align-items:center;justify-content:center;gap:7px;}
@@ -198,14 +200,15 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,s
       <div class="date" id="tgl-header"></div>
     </div>
     <div class="masthead-actions">
-      <button class="btn-setting" onclick="bukaPin('setting')" title="Pengaturan">⚙</button>
-      <button class="newday" onclick="askNewDay()"><span class="ic">✦</span> Hari Baru</button>
+      <button class="btn-setting" onclick="bukaPin('setting')" title="Pengaturan"><i class="fi fi-rr-settings"></i></button>
+      <button class="newday" onclick="askNewDay()"><i class="fi fi-rr-calendar-plus"></i> Hari Baru</button>
     </div>
   </div>
 
   <!-- Status export badge -->
   <div class="status-bar">
-    <div class="badge-status kosong" id="badge-export"></div>
+    <div class="badge-status kosong" id="badge-export-excel"></div>
+    <div class="badge-status kosong" id="badge-export-wa"></div>
   </div>
 
   <div class="hero">
@@ -232,16 +235,15 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,s
   </div>
 
   <div class="sec-head">
-    <span class="num">01</span>
     <span class="ttl" id="form-title">Input Transaksi</span>
     <span class="rule"></span>
   </div>
 
   <div class="form">
-    <div class="edit-banner" id="edit-banner"><span class="ic">✎</span> Sedang merevisi entry — ubah lalu simpan.</div>
+    <div class="edit-banner" id="edit-banner"><i class="fi fi-rr-pencil"></i> Sedang merevisi entry — ubah lalu simpan.</div>
     <div class="field">
       <label>Tanggal</label>
-      <input type="date" id="f-tanggal">
+      <input type="date" id="f-tanggal" readonly>
     </div>
     <div class="field">
       <label>Subject</label>
@@ -258,23 +260,22 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,s
     <div class="field pair">
       <div>
         <label>Debit (Rp)</label>
-        <input type="number" id="f-debit" placeholder="0" min="0" inputmode="numeric">
+        <input type="text" id="f-debit" placeholder="0" inputmode="numeric" oninput="formatRibuan(this)">
       </div>
       <div>
         <label>Kredit (Rp)</label>
-        <input type="number" id="f-kredit" placeholder="0" min="0" inputmode="numeric">
+        <input type="text" id="f-kredit" placeholder="0" inputmode="numeric" oninput="formatRibuan(this)">
       </div>
     </div>
     <div class="field">
       <label>Petugas</label>
       <input type="text" id="f-petugas" placeholder="Nama petugas">
     </div>
-    <button class="btn btn-primary" onclick="submitEntry()"><span class="ic">✓</span> <span id="btn-label">Simpan Entry</span></button>
-    <button class="btn btn-ghost" id="btn-cancel" style="display:none" onclick="cancelEdit()"><span class="ic">✕</span> Batal Revisi</button>
+    <button class="btn btn-primary" onclick="submitEntry()"><i class="fi fi-rr-check"></i> <span id="btn-label">Simpan Entry</span></button>
+    <button class="btn btn-ghost" id="btn-cancel" style="display:none" onclick="cancelEdit()"><i class="fi fi-rr-cross-small"></i> Batal Revisi</button>
   </div>
 
   <div class="sec-head">
-    <span class="num">02</span>
     <span class="ttl">Entry Hari Ini</span>
     <span class="rule"></span>
     <span class="badge"><span id="entry-count-2">0</span> entry</span>
@@ -286,13 +287,12 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,s
 
   <div class="send" id="send-section" style="display:none">
     <div class="sec-head">
-      <span class="num">03</span>
       <span class="ttl">Kirim ke Kantor Pusat</span>
       <span class="rule"></span>
     </div>
     <div class="send-grid">
-      <button class="send-btn send-wa" onclick="shareWA()">📲<span>WhatsApp</span></button>
-      <button class="send-btn send-xl" onclick="downloadXLSX()">📊<span>Excel</span></button>
+      <button class="send-btn send-wa" onclick="shareWA()"><i class="fi fi-brands-whatsapp"></i><span>WhatsApp</span></button>
+      <button class="send-btn send-xl" onclick="downloadXLSX()"><i class="fi fi-rr-file-excel"></i><span>Excel</span></button>
     </div>
     <div class="wa-nomor-wrap">
       <span>Nomor WA admin:</span>
@@ -329,7 +329,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,s
 <!-- PIN overlay -->
 <div class="pin-overlay" id="pin-overlay">
   <div class="pin-box">
-    <h3 id="pin-judul">🔒 Pengaturan</h3>
+    <h3><i class="fi fi-rr-lock"></i> <span id="pin-judul">Pengaturan</span></h3>
     <p id="pin-subjudul">Masukkan PIN untuk membuka Pengaturan</p>
     <div class="pin-dots">
       <div class="pin-dot" id="pd0"></div>
@@ -352,12 +352,12 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,s
 <div class="panel-overlay" id="panel-overlay">
   <div class="panel">
     <div class="panel-header">
-      <h3>⚙ Pengaturan</h3>
-      <button class="panel-close" onclick="tutupPanel()">✕</button>
+      <h3><i class="fi fi-rr-settings"></i> Pengaturan</h3>
+      <button class="panel-close" onclick="tutupPanel()"><i class="fi fi-rr-cross-small"></i></button>
     </div>
 
     <div class="panel-section">
-      <h4>📱 Nomor WA Admin Pusat</h4>
+      <h4><i class="fi fi-rr-mobile-notch"></i> Nomor WA Admin Pusat</h4>
       <p>Digunakan untuk tombol kirim WhatsApp. Format: angka saja, awali dengan kode negara.<br><small style="color:var(--ink-faint)">Contoh: 6281234567890</small></p>
       <div class="panel-input-row">
         <input type="tel" id="input-nomor-wa" inputmode="numeric" placeholder="6281234567890">
@@ -367,26 +367,37 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,s
     </div>
 
     <div class="panel-section">
-      <h4>🔒 Ganti PIN</h4>
+      <h4><i class="fi fi-rr-lock"></i> Ganti PIN</h4>
       <p>PIN digunakan untuk mengunci halaman Pengaturan ini.</p>
       <button class="panel-btn panel-btn-ghost" style="width:100%" onclick="gantiPIN()">Buat PIN Baru</button>
     </div>
 
     <div class="panel-section">
-      <h4>💾 Backup Data</h4>
+      <h4><i class="fi fi-rr-cloud-download"></i> Backup Data</h4>
       <p>Unduh seluruh arsip semua hari sebagai file .json. Simpan sebagai cadangan.</p>
       <button class="panel-btn panel-btn-ghost" style="width:100%" onclick="backupJSON()">Unduh Backup (.json)</button>
     </div>
 
     <div class="panel-section">
-      <h4>📂 Restore Data</h4>
+      <h4><i class="fi fi-rr-folder-open"></i> Restore Data</h4>
       <p>Muat data dari file backup .json. Data akan digabung dengan yang sudah ada.</p>
       <button class="panel-btn panel-btn-ghost" style="width:100%" onclick="document.getElementById('input-restore').click()">Pilih File Backup (.json)</button>
       <input type="file" id="input-restore" accept=".json" style="display:none" onchange="restoreJSON(event)">
     </div>
 
     <div class="panel-section">
-      <h4>🗑 Hapus Semua Arsip</h4>
+      <h4><i class="fi fi-rr-calendar"></i> Export Riwayat</h4>
+      <p>Pilih rentang tanggal untuk mengekspor gabungan data arsip ke Excel.</p>
+      <div class="panel-input-row" style="margin-bottom:8px">
+        <input type="date" id="riwayat-dari" oninput="previewRiwayat()">
+        <input type="date" id="riwayat-sampai" oninput="previewRiwayat()">
+      </div>
+      <button class="panel-btn panel-btn-primary" style="width:100%" onclick="exportRiwayat()">Export Excel Riwayat</button>
+      <div class="panel-status" id="status-riwayat"></div>
+    </div>
+
+    <div class="panel-section">
+      <h4><i class="fi fi-rr-trash"></i> Hapus Semua Arsip</h4>
       <p>Hapus seluruh data dari semua hari. Lakukan backup terlebih dahulu. Tidak bisa dibatalkan.</p>
       <button class="panel-btn panel-btn-danger" style="width:100%" onclick="hapusSemuaData()">Hapus Semua Data</button>
     </div>
@@ -402,7 +413,8 @@ let entries=[];
 let editId=null;
 let deleteId=null;
 let idCounter=1;
-let exported=false; // status export hari ini
+let exportedExcel=false; // status export Excel hari ini
+let exportedWA=false; // status kirim WhatsApp hari ini
 
 const STORAGE_KEY='RO_CD_hari_ini';
 const PIN_KEY='RO_CD_pin';
@@ -411,7 +423,7 @@ const ARSIP_PREFIX='RO_CD_arsip_';
 
 /* ========== STORAGE ========== */
 function saveState(){
-  try{localStorage.setItem(STORAGE_KEY,JSON.stringify({entries,idCounter,exported}));}
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify({entries,idCounter,exportedExcel,exportedWA}));}
   catch(err){console.warn('Gagal simpan:',err);}
 }
 function loadState(){
@@ -422,7 +434,9 @@ function loadState(){
     if(Array.isArray(data.entries)){
       entries=data.entries;
       idCounter=data.idCounter||(entries.reduce((m,e)=>Math.max(m,e.id),0)+1);
-      exported=data.exported||false;
+      // Kompatibel dengan data lama (sebelum status dipisah) yang masih memakai field 'exported' tunggal
+      exportedExcel=data.exportedExcel??data.exported??false;
+      exportedWA=data.exportedWA??data.exported??false;
     }
   }catch(err){console.warn('Gagal muat:',err);}
 }
@@ -439,6 +453,13 @@ document.getElementById('f-tanggal').value=todayStr;
 function fmt(n){return Math.round(n).toLocaleString('id-ID')}
 function fmtRp(n){return 'Rp '+fmt(n)}
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function formatRibuan(el){
+  const raw=el.value.replace(/\D/g,'');
+  el.value=raw?Number(raw).toLocaleString('id-ID'):'';
+}
+function unformatRibuan(val){
+  return parseFloat(String(val).replace(/\./g,''))||0;
+}
 
 /* ========== KALKULASI ========== */
 function calcSaldo(){let s=0;entries.forEach(e=>{s=s+e.debit-e.kredit;e.saldo=s;});}
@@ -460,14 +481,26 @@ function updateSummary(){
 
 /* ========== BADGE STATUS EXPORT ========== */
 function updateBadgeExport(){
-  const el=document.getElementById('badge-export');
-  if(!entries.length){el.className='badge-status kosong';el.textContent='';return;}
-  if(exported){
-    el.className='badge-status sudah';
-    el.innerHTML='✓ Sudah dikirim ke pusat';
+  const elE=document.getElementById('badge-export-excel');
+  const elW=document.getElementById('badge-export-wa');
+  if(!entries.length){
+    elE.className='badge-status kosong';elE.textContent='';
+    elW.className='badge-status kosong';elW.textContent='';
+    return;
+  }
+  if(exportedExcel){
+    elE.className='badge-status sudah';
+    elE.innerHTML='<i class="fi fi-rr-badge-check"></i> Excel sudah diexport';
   } else {
-    el.className='badge-status belum';
-    el.innerHTML='● Belum dikirim ke pusat';
+    elE.className='badge-status belum';
+    elE.innerHTML='● Excel belum diexport';
+  }
+  if(exportedWA){
+    elW.className='badge-status sudah';
+    elW.innerHTML='<i class="fi fi-rr-badge-check"></i> WhatsApp sudah dikirim';
+  } else {
+    elW.className='badge-status belum';
+    elW.innerHTML='● WhatsApp belum dikirim';
   }
 }
 
@@ -489,12 +522,12 @@ function renderList(){
         <span class="saldo-tag ${e.saldo<0?'neg':''}">${fmtRp(e.saldo)}</span>
       </div>
       <div class="flow">
-        ${e.debit?`<span class="d">↘ Debit ${fmtRp(e.debit)}</span>`:''}
-        ${e.kredit?`<span class="k">↗ Kredit ${fmtRp(e.kredit)}</span>`:''}
+        ${e.debit?`<span class="d"><i class="fi fi-rr-arrow-small-down"></i> Debit ${fmtRp(e.debit)}</span>`:''}
+        ${e.kredit?`<span class="k"><i class="fi fi-rr-arrow-small-up"></i> Kredit ${fmtRp(e.kredit)}</span>`:''}
       </div>
       <div class="acts">
-        <button class="edit" onclick="editEntry(${e.id})">✎ Edit</button>
-        <button class="del" onclick="askDelete(${e.id})">🗑 Hapus</button>
+        <button class="edit" onclick="editEntry(${e.id})"><i class="fi fi-rr-pencil"></i> Edit</button>
+        <button class="del" onclick="askDelete(${e.id})"><i class="fi fi-rr-trash"></i> Hapus</button>
       </div>
     </div>
   `).join('');
@@ -505,10 +538,11 @@ function submitEntry(){
   const subj=document.getElementById('f-subject').value.trim();
   const det=document.getElementById('f-detail').value.trim();
   const ket=document.getElementById('f-ket').value.trim();
-  const deb=parseFloat(document.getElementById('f-debit').value)||0;
-  const kre=parseFloat(document.getElementById('f-kredit').value)||0;
+  const deb=unformatRibuan(document.getElementById('f-debit').value);
+  const kre=unformatRibuan(document.getElementById('f-kredit').value);
   const pet=document.getElementById('f-petugas').value.trim();
-  const tgl=document.getElementById('f-tanggal').value;
+  const tgl=todayStr; // tanggal selalu dikunci ke hari ini (lihat §9)
+  if(deb>0&&kre>0){alert('Debit dan Kredit tidak boleh keduanya terisi pada satu entry yang sama. Pilih salah satu.');return;}
   if(!subj&&!det){alert('Mohon isi minimal Subject atau Detail.');return;}
   if(editId!==null){
     const idx=entries.findIndex(e=>e.id===editId);
@@ -517,7 +551,7 @@ function submitEntry(){
   } else {
     entries.push({id:idCounter++,tanggal:tgl,subject:subj,detail:det,ket,debit:deb,kredit:kre,petugas:pet,saldo:0});
   }
-  exported=false;
+  exportedExcel=false;exportedWA=false;
   calcSaldo();updateSummary();renderList();saveState();
   ['f-subject','f-detail','f-ket','f-debit','f-kredit'].forEach(id=>document.getElementById(id).value='');
 }
@@ -525,12 +559,12 @@ function submitEntry(){
 function editEntry(id){
   const e=entries.find(x=>x.id===id);if(!e)return;
   editId=id;
-  document.getElementById('f-tanggal').value=e.tanggal;
+  document.getElementById('f-tanggal').value=todayStr;
   document.getElementById('f-subject').value=e.subject;
   document.getElementById('f-detail').value=e.detail;
   document.getElementById('f-ket').value=e.ket;
-  document.getElementById('f-debit').value=e.debit||'';
-  document.getElementById('f-kredit').value=e.kredit||'';
+  document.getElementById('f-debit').value=e.debit?e.debit.toLocaleString('id-ID'):'';
+  document.getElementById('f-kredit').value=e.kredit?e.kredit.toLocaleString('id-ID'):'';
   document.getElementById('f-petugas').value=e.petugas;
   document.getElementById('btn-label').textContent='Update Entry';
   document.getElementById('form-title').textContent='Edit Transaksi';
@@ -541,6 +575,7 @@ function editEntry(id){
 }
 function exitEditMode(){
   editId=null;
+  document.getElementById('f-tanggal').value=todayStr;
   document.getElementById('btn-label').textContent='Simpan Entry';
   document.getElementById('form-title').textContent='Input Transaksi';
   document.getElementById('btn-cancel').style.display='none';
@@ -559,7 +594,7 @@ function confirmDelete(){
   const wasEditing=editId===deleteId;
   entries=entries.filter(e=>e.id!==deleteId);
   if(wasEditing)cancelEdit();
-  exported=false;
+  exportedExcel=false;exportedWA=false;
   calcSaldo();updateSummary();renderList();closeModal();saveState();
 }
 
@@ -570,10 +605,10 @@ function confirmNewDay(){
   // Arsipkan data hari ini sebelum reset
   if(entries.length){
     const arsipKey=ARSIP_PREFIX+todayStr+'_'+Date.now();
-    try{localStorage.setItem(arsipKey,JSON.stringify({tanggal:todayStr,entries,exported,disimpan:new Date().toISOString()}));}
+    try{localStorage.setItem(arsipKey,JSON.stringify({tanggal:todayStr,entries,exportedExcel,exportedWA,disimpan:new Date().toISOString()}));}
     catch(e){}
   }
-  entries=[];idCounter=1;exported=false;exitEditMode();
+  entries=[];idCounter=1;exportedExcel=false;exportedWA=false;exitEditMode();
   ['f-subject','f-detail','f-ket','f-debit','f-kredit'].forEach(id=>document.getElementById(id).value='');
   saveState();updateSummary();renderList();closeNewDay();
   toast('Hari baru dimulai. Data lama diarsipkan.');
@@ -610,7 +645,7 @@ function shareWA(){
   txt+=`*Total Debit: ${fmtRp(td)}*\n*Total Kredit: ${fmtRp(tk)}*\n*Saldo Akhir: ${fmtRp(td-tk)}*`;
   const url=nomor?`https://wa.me/${nomor}?text=${encodeURIComponent(txt)}`:`https://wa.me/?text=${encodeURIComponent(txt)}`;
   window.open(url);
-  exported=true;saveState();updateBadgeExport();
+  exportedWA=true;saveState();updateBadgeExport();
   toast('WhatsApp dibuka ✓');
 }
 
@@ -641,7 +676,7 @@ function downloadXLSX(){
   const wb=XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb,ws,'Kas Harian');
   XLSX.writeFile(wb,fname);
-  exported=true;saveState();updateBadgeExport();
+  exportedExcel=true;saveState();updateBadgeExport();
   toast('Excel diunduh ✓');
 }
 
@@ -656,7 +691,7 @@ function getAllArsipKeys(){
 }
 function backupJSON(){
   const arsipKeys=getAllArsipKeys();
-  const backup={versi:1,dibuat:new Date().toISOString(),outlet:'Chicken Day',hariIni:{tanggal:todayStr,entries,exported},arsip:{}};
+  const backup={versi:1,dibuat:new Date().toISOString(),outlet:'Chicken Day',hariIni:{tanggal:todayStr,entries,exportedExcel,exportedWA},arsip:{}};
   arsipKeys.forEach(k=>{
     try{const d=JSON.parse(localStorage.getItem(k));if(d)backup.arsip[k]=d;}catch(e){}
   });
@@ -686,7 +721,8 @@ function restoreJSON(event){
       if(backup.hariIni&&!entries.length&&Array.isArray(backup.hariIni.entries)&&backup.hariIni.entries.length){
         entries=backup.hariIni.entries;
         idCounter=entries.reduce((m,e)=>Math.max(m,e.id),0)+1;
-        exported=backup.hariIni.exported||false;
+        exportedExcel=backup.hariIni.exportedExcel??backup.hariIni.exported??false;
+        exportedWA=backup.hariIni.exportedWA??backup.hariIni.exported??false;
         calcSaldo();updateSummary();renderList();saveState();
         restored++;
       }
@@ -703,9 +739,107 @@ function hapusSemuaData(){
   if(!confirm(`Hapus SEMUA data (${total} hari)?\nPastikan sudah backup terlebih dahulu.\n\nTidak bisa dibatalkan.`))return;
   arsipKeys.forEach(k=>localStorage.removeItem(k));
   localStorage.removeItem(STORAGE_KEY);
-  entries=[];idCounter=1;exported=false;
+  entries=[];idCounter=1;exportedExcel=false;exportedWA=false;
   calcSaldo();updateSummary();renderList();
   toast('Semua data dihapus');
+}
+
+/* ========== EXPORT RIWAYAT ========== */
+function getArsipDalamRentang(dari,sampai){
+  const hasil=[];
+  getAllArsipKeys().forEach(k=>{
+    try{
+      const d=JSON.parse(localStorage.getItem(k));
+      if(d&&d.tanggal&&d.tanggal>=dari&&d.tanggal<=sampai&&Array.isArray(d.entries)){
+        hasil.push({
+          tanggal:d.tanggal,
+          entries:d.entries,
+          exportedExcel:d.exportedExcel??d.exported??false,
+          exportedWA:d.exportedWA??d.exported??false
+        });
+      }
+    }catch(e){}
+  });
+  // sertakan hari ini (belum diarsipkan) jika tanggalnya masuk rentang
+  if(entries.length&&todayStr>=dari&&todayStr<=sampai){
+    hasil.push({tanggal:todayStr,entries,exportedExcel,exportedWA});
+  }
+  hasil.sort((a,b)=>a.tanggal.localeCompare(b.tanggal));
+  return hasil;
+}
+function previewRiwayat(){
+  const dari=document.getElementById('riwayat-dari').value;
+  const sampai=document.getElementById('riwayat-sampai').value;
+  const el=document.getElementById('status-riwayat');
+  if(!dari||!sampai){el.textContent='';return;}
+  if(dari>sampai){el.textContent='Tanggal awal tidak boleh lebih besar dari tanggal akhir';return;}
+  const hariList=getArsipDalamRentang(dari,sampai);
+  el.textContent=hariList.length?`Ditemukan ${hariList.length} hari arsip dalam rentang ini`:'Tidak ada arsip dalam rentang tanggal tersebut';
+}
+function askFileNameRiwayat(def){
+  let name=prompt('Nama file (.xlsx):',def);
+  if(name===null)return null;
+  name=name.trim();if(!name)name=def;
+  name=name.replace(/[\\/:*?"<>|]/g,'-');
+  if(!name.toLowerCase().endsWith('.xlsx'))name+='.xlsx';
+  return name;
+}
+function exportRiwayat(){
+  const dari=document.getElementById('riwayat-dari').value;
+  const sampai=document.getElementById('riwayat-sampai').value;
+  if(!dari||!sampai){toast('Pilih kedua tanggal terlebih dahulu');return;}
+  if(dari>sampai){toast('Tanggal awal tidak boleh lebih besar dari tanggal akhir');return;}
+  const hariList=getArsipDalamRentang(dari,sampai);
+  if(!hariList.length){toast('Tidak ada data arsip dalam rentang tanggal tersebut');return;}
+
+  const def=`Riwayat_RO_CD_${dari}_sd_${sampai}`;
+  const fname=askFileNameRiwayat(def);if(fname===null)return;
+
+  // --- Sheet 1: Rekap Harian ---
+  const rekapAoa=[['Tanggal','Jumlah Transaksi','Total Debit','Total Kredit','Saldo Akhir Hari','Petugas Terakhir','Status Excel','Status WA']];
+  hariList.forEach(h=>{
+    const td=h.entries.reduce((a,e)=>a+e.debit,0);
+    const tk=h.entries.reduce((a,e)=>a+e.kredit,0);
+    const pet=h.entries.length?(h.entries[h.entries.length-1].petugas||'-'):'-';
+    rekapAoa.push([h.tanggal,h.entries.length,td,tk,null,pet,h.exportedExcel?'Sudah':'Belum',h.exportedWA?'Sudah':'Belum']);
+  });
+  rekapAoa.push(['TOTAL','','','',null,'','','']);
+  const ws1=XLSX.utils.aoa_to_sheet(rekapAoa);
+  const nHari=hariList.length;
+  for(let i=0;i<nHari;i++){const r=i+2;ws1[`E${r}`]={t:'n',f:`C${r}-D${r}`};}
+  const trR=nHari+2;
+  ws1[`B${trR}`]={t:'n',f:`SUM(B2:B${nHari+1})`};
+  ws1[`C${trR}`]={t:'n',f:`SUM(C2:C${nHari+1})`};
+  ws1[`D${trR}`]={t:'n',f:`SUM(D2:D${nHari+1})`};
+  ws1[`E${trR}`]={t:'n',f:`C${trR}-D${trR}`};
+  ws1['!cols']=[{wch:12},{wch:14},{wch:13},{wch:13},{wch:14},{wch:16},{wch:11},{wch:11}];
+
+  // --- Sheet 2: Detail Transaksi ---
+  const detailAoa=[['No','Tanggal','Subject','Detail','Keterangan','Debit','Kredit','Saldo','Petugas']];
+  const rowMeta=[];
+  let rowPtr=2,no=1;
+  hariList.forEach(h=>{
+    const startRow=rowPtr;
+    h.entries.forEach(e=>{
+      detailAoa.push([no++,e.tanggal,e.subject,e.detail,e.ket,e.debit||0,e.kredit||0,null,e.petugas]);
+      rowPtr++;
+    });
+    if(rowPtr>startRow)rowMeta.push({startRow,endRow:rowPtr-1});
+  });
+  const ws2=XLSX.utils.aoa_to_sheet(detailAoa);
+  rowMeta.forEach(rm=>{
+    for(let r=rm.startRow;r<=rm.endRow;r++){
+      const prev=r===rm.startRow?'0':`H${r-1}`;
+      ws2[`H${r}`]={t:'n',f:`${prev}+F${r}-G${r}`};
+    }
+  });
+  ws2['!cols']=[{wch:5},{wch:12},{wch:16},{wch:16},{wch:20},{wch:13},{wch:13},{wch:13},{wch:14}];
+
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws1,'Rekap Harian');
+  XLSX.utils.book_append_sheet(wb,ws2,'Detail Transaksi');
+  XLSX.writeFile(wb,fname);
+  toast(`Riwayat diexport (${hariList.length} hari)`);
 }
 
 /* ========== PIN ========== */
@@ -725,7 +859,7 @@ function bukaPin(tujuan){
   pinBuffer='';pinCoba=0;
   if(!sudahAdaPIN()){
     pinMode='buat';
-    document.getElementById('pin-judul').textContent='🔒 Buat PIN';
+    document.getElementById('pin-judul').textContent='Buat PIN';
     document.getElementById('pin-subjudul').textContent='Buat PIN 4 digit untuk mengunci Pengaturan';
   } else {
     const now=Date.now();
@@ -734,7 +868,7 @@ function bukaPin(tujuan){
       toast(`Terlalu banyak percobaan. Coba lagi dalam ${detik}s.`);return;
     }
     pinMode='buka';
-    document.getElementById('pin-judul').textContent='🔒 Pengaturan';
+    document.getElementById('pin-judul').textContent='Pengaturan';
     document.getElementById('pin-subjudul').textContent='Masukkan PIN untuk membuka Pengaturan';
   }
   document.getElementById('pin-err').textContent='';
@@ -764,7 +898,7 @@ function prosesPIN(){
   if(pinMode==='buat'){
     pinSementara=pinBuffer;pinBuffer='';
     pinMode='konfirmasi';
-    document.getElementById('pin-judul').textContent='🔒 Konfirmasi PIN';
+    document.getElementById('pin-judul').textContent='Konfirmasi PIN';
     document.getElementById('pin-subjudul').textContent='Masukkan ulang PIN untuk konfirmasi';
     document.getElementById('pin-err').textContent='';
     renderPinDots();
@@ -778,7 +912,7 @@ function prosesPIN(){
       renderPinSalah();
       setTimeout(()=>{
         pinMode='buat';pinSementara='';
-        document.getElementById('pin-judul').textContent='🔒 Buat PIN';
+        document.getElementById('pin-judul').textContent='Buat PIN';
         document.getElementById('pin-subjudul').textContent='Buat PIN 4 digit untuk mengunci Pengaturan';
         document.getElementById('pin-err').textContent='';
       },600);
