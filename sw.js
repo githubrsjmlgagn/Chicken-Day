@@ -1,4 +1,4 @@
-const CACHE = 'chickenday-v7';
+const CACHE = 'chickenday-v8';
 const ASSETS = [
   './',
   './index.html',
