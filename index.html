@@ -921,6 +921,29 @@ function askFileNameRiwayat(def){
   return name;
 }
 
+// Cari saldo akhir dari arsip SEBELUM tanggal 'dari' — untuk titik awal riwayat
+function getSaldoSebelumRentang(dari){
+  // Kumpulkan semua arsip yang tanggalnya < dari, ambil yang terbaru
+  const kandidat=[];
+  getAllArsipKeys().forEach(k=>{
+    try{
+      const d=JSON.parse(localStorage.getItem(k));
+      if(d&&d.tanggal&&d.tanggal<dari&&Array.isArray(d.entries)&&d.entries.length){
+        kandidat.push(d);
+      }
+    }catch(e){}
+  });
+  // Sertakan hari ini kalau tanggalnya sebelum rentang (edge case)
+  if(entries.length&&todayStr<dari)kandidat.push({tanggal:todayStr,entries});
+  if(!kandidat.length)return{saldo:0,tanggal:null};
+  // Ambil yang paling dekat sebelum 'dari'
+  kandidat.sort((a,b)=>b.tanggal.localeCompare(a.tanggal));
+  const arsipTerdekat=kandidat[0];
+  let s=0;
+  arsipTerdekat.entries.forEach(e=>{s=s+(e.debit||0)-(e.kredit||0);});
+  return{saldo:s,tanggal:arsipTerdekat.tanggal};
+}
+
 function exportRiwayat(){
   const dari=document.getElementById('riwayat-dari').value;
   const sampai=document.getElementById('riwayat-sampai').value;
@@ -932,51 +955,80 @@ function exportRiwayat(){
   const def=`Riwayat_RO_CD_${outlet?outlet+'_':''}${dari}_sd_${sampai}`;
   const fname=askFileNameRiwayat(def);if(fname===null)return;
 
+  // Saldo awal sebelum rentang (Opsi B dengan fallback 0)
+  const{saldo:saldoAwalRentang,tanggal:tglSebelum}=getSaldoSebelumRentang(dari);
+
   // --- Sheet 1: Rekap Harian ---
+  // Hitung saldo akhir per hari secara kumulatif (nyambung antar hari)
   const rekapAoa=[['Tanggal','Jumlah Transaksi','Total Debit','Total Kredit','Saldo Akhir Hari','Petugas Terakhir','Status Excel','Status WA']];
+  let saldoKumulatif=saldoAwalRentang;
   hariList.forEach(h=>{
     const td=h.entries.reduce((a,e)=>a+e.debit,0);
     const tk=h.entries.reduce((a,e)=>a+e.kredit,0);
+    saldoKumulatif=saldoKumulatif+td-tk;
     const pet=h.entries.length?(h.entries[h.entries.length-1].petugas||'-'):'-';
-    rekapAoa.push([h.tanggal,h.entries.length,td,tk,null,pet,h.exportedExcel?'Sudah':'Belum',h.exportedWA?'Sudah':'Belum']);
+    rekapAoa.push([h.tanggal,h.entries.length,td,tk,saldoKumulatif,pet,h.exportedExcel?'Sudah':'Belum',h.exportedWA?'Sudah':'Belum']);
   });
-  rekapAoa.push(['TOTAL','','','',null,'','','']);
+  rekapAoa.push(['TOTAL','','','','','','','']);
   const ws1=XLSX.utils.aoa_to_sheet(rekapAoa);
   const nHari=hariList.length;
-  for(let i=0;i<nHari;i++){const r=i+2;ws1[`E${r}`]={t:'n',f:`C${r}-D${r}`};}
   const trR=nHari+2;
   ws1[`B${trR}`]={t:'n',f:`SUM(B2:B${nHari+1})`};
   ws1[`C${trR}`]={t:'n',f:`SUM(C2:C${nHari+1})`};
   ws1[`D${trR}`]={t:'n',f:`SUM(D2:D${nHari+1})`};
-  ws1[`E${trR}`]={t:'n',f:`C${trR}-D${trR}`};
+  // Saldo Akhir TOTAL = saldo baris terakhir (bukan sum — saldo adalah posisi, bukan akumulasi)
+  ws1[`E${trR}`]={t:'n',f:`E${nHari+1}`};
   ws1['!cols']=[{wch:12},{wch:14},{wch:13},{wch:13},{wch:14},{wch:16},{wch:11},{wch:11}];
 
   // --- Sheet 2: Detail Transaksi ---
+  // Tambah baris Saldo Awal jika ada arsip sebelum rentang
   const detailAoa=[['No','Tanggal','Subject','Detail','Keterangan','Debit','Kredit','Saldo','Petugas']];
-  const rowMeta=[];
-  let rowPtr=2,no=1;
+  const adaSaldoAwalRentang=tglSebelum!==null&&saldoAwalRentang!==0;
+  if(adaSaldoAwalRentang){
+    detailAoa.push(['—',tglSebelum,'Saldo Awal','Saldo akhir sebelum rentang','','','',saldoAwalRentang,'—']);
+  }
+
+  let rowPtr=adaSaldoAwalRentang?3:2; // row 2 = header saldo awal jika ada, else langsung data
+  let no=1;
   hariList.forEach(h=>{
-    const startRow=rowPtr;
     h.entries.forEach(e=>{
       detailAoa.push([no++,e.tanggal,e.subject,e.detail,e.ket,e.debit||0,e.kredit||0,null,e.petugas]);
       rowPtr++;
     });
-    if(rowPtr>startRow)rowMeta.push({startRow,endRow:rowPtr-1});
   });
+
   const ws2=XLSX.utils.aoa_to_sheet(detailAoa);
-  rowMeta.forEach(rm=>{
-    for(let r=rm.startRow;r<=rm.endRow;r++){
-      const prev=r===rm.startRow?'0':`H${r-1}`;
-      ws2[`H${r}`]={t:'n',f:`${prev}+F${r}-G${r}`};
-    }
-  });
-  ws2['!cols']=[{wch:5},{wch:12},{wch:16},{wch:16},{wch:20},{wch:13},{wch:13},{wch:13},{wch:14}];
+
+  // Formula saldo berjalan — nyambung dari baris pertama sampai terakhir tanpa reset
+  const totalRows=rowPtr-1;
+  const dataStartRow=adaSaldoAwalRentang?3:2;
+  const saldoAwalRow=adaSaldoAwalRentang?2:null;
+  for(let r=dataStartRow;r<=totalRows;r++){
+    const prevSaldo=r===dataStartRow
+      ?(adaSaldoAwalRentang?`H${saldoAwalRow}`:'0')
+      :`H${r-1}`;
+    ws2[`H${r}`]={t:'n',f:`${prevSaldo}+F${r}-G${r}`};
+  }
+
+  // Baris TOTAL di sheet detail
+  const trD=totalRows+1;
+  detailAoa.push(['','','','','TOTAL',null,null,null,'']);
+  // Re-render sheet setelah push TOTAL (aoa sudah final)
+  const ws2final=XLSX.utils.aoa_to_sheet(detailAoa);
+  // Salin formula saldo dari ws2 ke ws2final
+  for(let r=dataStartRow;r<=totalRows;r++){
+    ws2final[`H${r}`]=ws2[`H${r}`];
+  }
+  ws2final[`F${trD}`]={t:'n',f:`SUM(F${dataStartRow}:F${totalRows})`};
+  ws2final[`G${trD}`]={t:'n',f:`SUM(G${dataStartRow}:G${totalRows})`};
+  ws2final[`H${trD}`]={t:'n',f:`H${totalRows}`}; // saldo akhir = posisi saldo baris terakhir
+  ws2final['!cols']=[{wch:5},{wch:12},{wch:16},{wch:16},{wch:20},{wch:13},{wch:13},{wch:13},{wch:14}];
 
   const wb=XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb,ws1,'Rekap Harian');
-  XLSX.utils.book_append_sheet(wb,ws2,'Detail Transaksi');
+  XLSX.utils.book_append_sheet(wb,ws2final,'Detail Transaksi');
   XLSX.writeFile(wb,fname);
-  toast(`Riwayat diexport (${hariList.length} hari)`);
+  toast(`Riwayat diexport (${hariList.length} hari)${tglSebelum?' · Saldo awal dari '+tglSebelum:''}`);
 }
 
 /* ========== PIN ========== */
